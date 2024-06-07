@@ -1,0 +1,22 @@
+update:
+  period: 2s
+
+quarkus:
+  http:
+    port: 4563
+  tls:
+    trust-all: true
+  datasource:
+    db-kind: postgresql
+
+"%prod":
+  quarkus:
+    kubernetes-config:
+      enabled: true
+      config-maps: crypto-app-config
+
+"%dev":
+  quarkus:
+    kubernetes-client:
+      devservices:
+        enabled: false
