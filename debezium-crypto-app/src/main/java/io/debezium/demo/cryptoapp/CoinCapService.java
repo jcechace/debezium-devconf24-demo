@@ -19,11 +19,11 @@ public class CoinCapService {
 
     public void fetchAndUpdate() {
         CryptoAssets assets = client.getAll();
-        assets.getData().forEach(crypto -> update(assets.getTimestamp(), crypto));
+        assets.getData().forEach(this::update);
     }
 
     @Transactional
-    public void update(long timestamp, CryptoEntity entity) {
-        repository.upsert(timestamp, entity);
+    public void update(CryptoEntity entity) {
+        repository.upsert(entity);
     }
 }

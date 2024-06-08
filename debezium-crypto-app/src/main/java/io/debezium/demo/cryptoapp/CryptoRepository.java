@@ -12,17 +12,16 @@ public class CryptoRepository implements PanacheRepositoryBase<CryptoEntity, Str
     @Inject
     Logger logger;
 
-    public boolean upsert(long timestamp, CryptoEntity crypto) {
+    public boolean upsert(CryptoEntity crypto) {
         var entity = findById(crypto.getId());
 
         if (entity == null) {
             logger.debugf("Creating new crypto: %s", crypto.getName());
-            crypto.setTimestamp(timestamp);
             persist(crypto);
             return true;
         } else if (!entity.hasSameDataAs(crypto)) {
             logger.debugf("Updating crypto: %s", crypto.getName());
-            crypto.copyTo(timestamp, entity);
+            crypto.copyTo(entity);
             persist(entity);
             return true;
         }

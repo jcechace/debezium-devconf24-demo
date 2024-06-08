@@ -7,7 +7,6 @@ CREATE TABLE coincap (
     supply numeric(60,20),
     volumeDay numeric(60,20),
     vwmap numeric(60,20),
-    lastUpdate bigint,
     id varchar(255) not null,
     name varchar(255),
     symbol varchar(255),
