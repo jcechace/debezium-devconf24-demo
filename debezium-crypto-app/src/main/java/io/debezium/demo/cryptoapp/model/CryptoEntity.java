@@ -7,6 +7,8 @@ import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.math.BigDecimal;
+
 @Getter
 @Setter
 @Entity
@@ -19,20 +21,24 @@ public class CryptoEntity {
     private String symbol;
     private String name;
 
-    private Double supply;
-    private Double maxSupply;
-    private Double marketCapUsd;
+    @Column(precision = 60, scale = 20)
+    private BigDecimal supply;
+    @Column(precision = 60, scale = 20)
+    private BigDecimal maxSupply;
+    @Column(precision = 60, scale = 20)
+    private BigDecimal marketCapUsd;
 
-    @Column(name = "volumeDay")
-    private Double volumeUsd24Hr;
+    @Column(name = "volumeDay", precision = 60, scale = 20)
+    private BigDecimal volumeUsd24Hr;
 
-    private Double priceUsd;
+    @Column(precision = 60, scale = 20)
+    private BigDecimal priceUsd;
 
-    @Column(name = "changePercent")
-    private Double changePercent24Hr;
+    @Column(name = "changePercent", precision = 60, scale = 20)
+    private BigDecimal changePercent24Hr;
 
-    @Column(name = "vwmap")
-    private Double vwap24Hr;
+    @Column(name = "vwmap", precision = 60, scale = 20)
+    private BigDecimal vwap24Hr;
 
     @Column(name = "lastUpdate")
     private long timestamp;
