@@ -1,0 +1,42 @@
+---
+apiVersion: eventing.knative.dev/v1
+kind: Broker
+metadata:
+    name: debezium-sample-broker
+---
+apiVersion: serving.knative.dev/v1
+kind: Service
+metadata:
+    name: ce-crypto-collector
+    labels:
+        serving.knative.dev/visibility: cluster-local
+spec:
+    template:
+        metadata:
+            annotations:
+                autoscaling.knative.dev/min-scale: "1"
+        spec:
+            containers:
+                - image: quay.io/jcechace/dbz-crypto-collector:native-latest
+                  imagePullPolicy: IfNotPresent
+                  env:
+                      - name: QUARKUS_REDIS_HOST
+                        value: "redis:6379"
+
+---
+apiVersion: eventing.knative.dev/v1
+kind: Trigger
+metadata:
+    name: ce-collector-trigger
+    labels:
+        eventing.knative.dev/broker: debezium-sample-broker
+spec:
+    broker: debezium-sample-broker
+    filter:
+        attributes:
+            type: io.debezium.connector.postgresql.DataChangeEvent
+    subscriber:
+        ref:
+            apiVersion: serving.knative.dev/v1
+            kind: Service
+            name: ce-crypto-collector
