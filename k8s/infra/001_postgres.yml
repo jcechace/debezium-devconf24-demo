@@ -73,12 +73,12 @@ spec:
                 - "/bin/sh"
                 - "-i"
                 - "-c"
-                - "PGPASSWORD=${POSTGRES_PASSWORD} /usr/bin/psql -w -U ${POSTGRES_USER} -d ${POSTGRES_DB} -c 'SELECT 1'"
+                - "PGPASSWORD=${POSTGRES_PASSWORD} /usr/local/bin/psql -w -U ${POSTGRES_USER} -d ${POSTGRES_DB} -c 'SELECT 1'"
             initialDelaySeconds: 5
             timeoutSeconds: 1
           terminationMessagePolicy: File
           terminationMessagePath: /dev/termination-log
-          image: quay.io/debezium/example-postgres:latest
+          image: quay.io/debezium/postgres:16-alpine
       restartPolicy: Always
       terminationGracePeriodSeconds: 30
       dnsPolicy: ClusterFirst

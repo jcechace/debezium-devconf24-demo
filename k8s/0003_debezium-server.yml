@@ -52,6 +52,7 @@ spec:
       database.user: ${POSTGRES_USER}
       database.password: ${POSTGRES_PASSWORD}
       database.dbname: ${POSTGRES_DB}
+      table.include.list: public.coincap
       topic.prefix: crypto
       plugin.name: pgoutput
       decimal.handling.mode: string
