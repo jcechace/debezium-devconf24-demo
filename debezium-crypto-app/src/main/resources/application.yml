@@ -1,5 +1,8 @@
 update:
   period: 5s
+debezium:
+  log:
+    level: ${quarkus.log.level}
 
 quarkus:
   http:
@@ -14,7 +17,7 @@ quarkus:
   log:
     category:
       "io.debezium":
-        level: DEBUG
+        level: ${debezium.log.level}
 "%prod":
   quarkus:
     kubernetes-config:
@@ -22,6 +25,9 @@ quarkus:
       config-maps: crypto-app-config
 
 "%dev":
+  debezium:
+    log:
+      level: DEBUG
   quarkus:
     kubernetes-client:
       devservices:

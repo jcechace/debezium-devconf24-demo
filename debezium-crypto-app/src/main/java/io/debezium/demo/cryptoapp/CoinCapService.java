@@ -2,13 +2,13 @@ package io.debezium.demo.cryptoapp;
 
 import io.debezium.demo.cryptoapp.client.CoinCapClient;
 import io.debezium.demo.cryptoapp.model.CryptoAssets;
+import io.debezium.demo.cryptoapp.model.CryptoEntity;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
 
 @ApplicationScoped
-@Transactional
 public class CoinCapService {
 
     @Inject
@@ -19,6 +19,11 @@ public class CoinCapService {
 
     public void fetchAndUpdate() {
         CryptoAssets assets = client.getAll();
-        repository.upsertAll(assets.getTimestamp(), assets.getData());
+        assets.getData().forEach(crypto -> update(assets.getTimestamp(), crypto));
+    }
+
+    @Transactional
+    public void update(long timestamp, CryptoEntity entity) {
+        repository.upsert(timestamp, entity);
     }
 }

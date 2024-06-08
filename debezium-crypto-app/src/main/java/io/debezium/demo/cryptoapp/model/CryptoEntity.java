@@ -8,6 +8,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.math.BigDecimal;
+import java.util.Objects;
 
 @Getter
 @Setter
@@ -44,7 +45,7 @@ public class CryptoEntity {
     private long timestamp;
 
 
-    public CryptoEntity copyTo(CryptoEntity target) {
+    public CryptoEntity copyTo(long timestamp, CryptoEntity target) {
         target.rank = this.rank;
         target.symbol = this.symbol;
         target.name = this.name;
@@ -55,8 +56,47 @@ public class CryptoEntity {
         target.priceUsd = this.priceUsd;
         target.changePercent24Hr = this.changePercent24Hr;
         target.vwap24Hr = this.vwap24Hr;
-        target.timestamp = this.timestamp;
+        target.timestamp = timestamp;
 
         return target;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof CryptoEntity that)) return false;
+        return Objects.equals(id, that.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(id);
+    }
+
+    public boolean hasSameDataAs(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof CryptoEntity that)) {
+            return false;
+        }
+        return Objects.equals(id, that.id)
+                && Objects.equals(rank, that.rank)
+                && Objects.equals(symbol, that.symbol)
+                && Objects.equals(name, that.name)
+                && numericEquals(supply, that.supply)
+                && numericEquals(maxSupply, that.maxSupply)
+                && numericEquals(marketCapUsd, that.marketCapUsd)
+                && numericEquals(volumeUsd24Hr, that.volumeUsd24Hr)
+                && numericEquals(changePercent24Hr, that.changePercent24Hr)
+                && numericEquals(vwap24Hr, that.vwap24Hr)
+                && numericEquals(priceUsd, that.priceUsd);
+    }
+
+    private static boolean numericEquals(BigDecimal a, BigDecimal b) {
+        if (a == null || b == null) {
+            return false;
+        }
+        return a.compareTo(b) == 0;
     }
 }
