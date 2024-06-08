@@ -1,0 +1,57 @@
+---
+apiVersion: sources.knative.dev/v1
+kind: SinkBinding
+metadata:
+  name: debezium-crypto-cdc-binding
+spec:
+  subject:
+    apiVersion: apps/v1
+    kind: Deployment
+    selector:
+      matchLabels:
+        debezium.io/component: DebeziumServer
+        debezium.io/instance: debezium-crypto-cdc
+  sink:
+    ref:
+      apiVersion: eventing.knative.dev/v1
+      kind: Broker
+      name: debezium-sample-broker
+---
+apiVersion: debezium.io/v1alpha1
+kind: DebeziumServer
+metadata:
+  name: debezium-crypto-cdc
+spec:
+  image: quay.io/debezium/server:2.7.0.Beta1
+  quarkus:
+    config:
+      log.level: INFO
+      log.console.json: false
+      kubernetes-config.enabled: true
+      kubernetes-config.secrets: postgresql-credentials
+  runtime:
+    metrics:
+      jmxExporter:
+        enabled: true
+  sink:
+    type: http
+  format:
+    value:
+      type: cloudevents
+      config:
+        json.schemas.enable: false
+  source:
+    class: io.debezium.connector.postgresql.PostgresConnector
+    offset:
+      memory: {}
+    schemaHistory:
+      memory: {}
+    config:
+      database.hostname: postgresql
+      database.port: 5432
+      database.user: ${POSTGRES_USER}
+      database.password: ${POSTGRES_PASSWORD}
+      database.dbname: ${POSTGRES_DB}
+      topic.prefix: crypto
+      plugin.name: pgoutput
+      decimal.handling.mode: string
