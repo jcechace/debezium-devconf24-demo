@@ -20,8 +20,8 @@ spec:
                 - image: quay.io/jcechace/dbz-crypto-collector:native-latest
                   imagePullPolicy: IfNotPresent
                   env:
-                      - name: QUARKUS_REDIS_HOST
-                        value: "redis:6379"
+                      - name: QUARKUS_REDIS_HOSTS
+                        value: "redis://redis:6379"
 
 ---
 apiVersion: eventing.knative.dev/v1
