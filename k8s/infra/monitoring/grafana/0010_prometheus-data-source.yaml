@@ -1,0 +1,18 @@
+---
+apiVersion: grafana.integreatly.org/v1beta1
+kind: GrafanaDatasource
+metadata:
+  name: prometheus-source
+spec:
+  instanceSelector:
+    matchLabels:
+      dashboards: "debezium"
+  datasource:
+    name: prometheus-server
+    type: prometheus
+    access: proxy
+    url: http://prometheus-service.debezium.svc.cluster.local:80
+    basicAuth: false
+    basicAuthUser: internal
+    isDefault: false
+    editable: true

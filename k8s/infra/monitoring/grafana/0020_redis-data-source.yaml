@@ -1,0 +1,25 @@
+---
+apiVersion: grafana.integreatly.org/v1beta1
+kind: GrafanaDatasource
+metadata:
+  name: redis-source
+spec:
+  instanceSelector:
+    matchLabels:
+      dashboards: "debezium"
+  plugins:
+    - name: redis-datasource
+      version: 2.2.0
+  datasource:
+    name: Redis
+    type: redis-datasource
+    access: proxy
+    isDefault: true
+    orgId: 1
+    url: redis://redis:6379
+    jsonData:
+      poolSize: 5
+      timeout: 10
+      pingInterval: 0
+      pipelineWindow: 0
+    editable: true
