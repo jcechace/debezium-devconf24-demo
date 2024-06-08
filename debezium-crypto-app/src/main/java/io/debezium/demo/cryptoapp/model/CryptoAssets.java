@@ -8,5 +8,5 @@ import java.util.List;
 @Setter
 public class CryptoAssets {
     private List<CryptoEntity> data;
-    private Double timestamp;
+    private long timestamp;
 }

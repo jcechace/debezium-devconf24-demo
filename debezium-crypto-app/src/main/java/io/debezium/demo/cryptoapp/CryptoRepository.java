@@ -9,11 +9,12 @@ import jakarta.enterprise.context.ApplicationScoped;
 @ApplicationScoped
 public class CryptoRepository implements PanacheRepositoryBase<CryptoEntity, String> {
 
-    public void upsertAll(List<CryptoEntity> cryptos) {
+    public void upsertAll(long timestamp, List<CryptoEntity> cryptos) {
         cryptos.stream()
                 .map(crypto -> findByIdOptional(crypto.getId())
                         .map(crypto::copyTo)
                         .orElse(crypto))
+                .peek(entity -> entity.setTimestamp(timestamp))
                 .forEach(this::persist);
     }
 }

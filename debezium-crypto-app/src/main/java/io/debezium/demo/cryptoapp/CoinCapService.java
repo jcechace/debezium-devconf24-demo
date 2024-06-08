@@ -18,7 +18,7 @@ public class CoinCapService {
     CoinCapClient client;
 
     public void fetchAndUpdate() {
-        CryptoAssets page = client.getAll();
-        repository.upsertAll(page.getData());
+        CryptoAssets assets = client.getAll();
+        repository.upsertAll(assets.getTimestamp(), assets.getData());
     }
 }

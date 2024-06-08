@@ -34,6 +34,9 @@ public class CryptoEntity {
     @Column(name = "vwmap")
     private Double vwap24Hr;
 
+    @Column(name = "lastUpdate")
+    private long timestamp;
+
 
     public CryptoEntity copyTo(CryptoEntity target) {
         target.rank = this.rank;
@@ -46,6 +49,7 @@ public class CryptoEntity {
         target.priceUsd = this.priceUsd;
         target.changePercent24Hr = this.changePercent24Hr;
         target.vwap24Hr = this.vwap24Hr;
+        target.timestamp = this.timestamp;
 
         return target;
     }
