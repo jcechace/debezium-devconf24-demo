@@ -12,9 +12,6 @@ metadata:
         serving.knative.dev/visibility: cluster-local
 spec:
     template:
-        metadata:
-            annotations:
-                autoscaling.knative.dev/min-scale: "1"
         spec:
             containers:
                 - image: quay.io/jcechace/dbz-crypto-collector:native-latest
