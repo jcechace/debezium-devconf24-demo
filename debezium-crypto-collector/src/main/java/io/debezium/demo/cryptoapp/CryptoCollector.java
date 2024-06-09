@@ -31,7 +31,7 @@ public class CryptoCollector {
 
         var id = after.get("id").asText();
         var name = after.get("name").asText();
-        var timestamp = event.time().toEpochSecond();
+        var timestamp = event.time().toInstant().toEpochMilli();
         var stringPrice = after.get("priceusd").asText();
         var stringVolume = after.get("volumeday").asText();
         var price = convertNumeric(stringPrice);
