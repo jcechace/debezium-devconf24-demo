@@ -10,6 +10,7 @@ data:
   redis-config: |-
     maxmemory 1gb
     maxmemory-policy allkeys-lru 
+    dir /redis-master-data
     protected-mode no
     bind 0.0.0.0
     port 6379
