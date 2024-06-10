@@ -127,7 +127,7 @@
       </properties>
     </profile>
     <profile>
-      <id>adm64</id>
+      <id>amd64</id>
       <properties>
         <quarkus.jib.platforms>linux/amd64</quarkus.jib.platforms>
         <quarkus.container-image.tag>native-amd64-latest</quarkus.container-image.tag>
