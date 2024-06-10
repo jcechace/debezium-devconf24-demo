@@ -11,7 +11,7 @@ spec:
     name: prometheus-server
     type: prometheus
     access: proxy
-    url: http://prometheus-service.debezium.svc.cluster.local:80
+    url: http://prometheus-service:80
     basicAuth: false
     basicAuthUser: internal
     isDefault: false
