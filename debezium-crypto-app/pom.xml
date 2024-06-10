@@ -17,6 +17,7 @@
     <quarkus.container-image.registry>quay.io</quarkus.container-image.registry>
     <quarkus.container-image.tag>latest</quarkus.container-image.tag>
     <quarkus.jib.platforms>linux/amd64,linux/arm64/v8</quarkus.jib.platforms>
+    <quarkus.native.container-build>true</quarkus.native.container-build>
     <quarkus.kubernetes.idempotent>true</quarkus.kubernetes.idempotent>
     <quarkus.kubernetes.vcs-uri.enabled>false</quarkus.kubernetes.vcs-uri.enabled>
     <quarkus.platform.artifact-id>quarkus-bom</quarkus.platform.artifact-id>
@@ -146,6 +147,20 @@
   </build>
   <profiles>
     <profile>
+      <id>arm64</id>
+      <properties>
+        <quarkus.jib.platforms>linux/arm64/v8</quarkus.jib.platforms>
+        <quarkus.container-image.tag>native-arm64-latest</quarkus.container-image.tag>
+      </properties>
+    </profile>
+    <profile>
+      <id>adm64</id>
+      <properties>
+        <quarkus.jib.platforms>linux/amd64</quarkus.jib.platforms>
+        <quarkus.container-image.tag>native-amd64-latest</quarkus.container-image.tag>
+      </properties>
+    </profile>
+    <profile>
       <id>native</id>
       <activation>
         <property>
@@ -177,7 +192,6 @@
       </build>
       <properties>
         <quarkus.native.enabled>true</quarkus.native.enabled>
-        <quarkus.container-image.tag>native-latest</quarkus.container-image.tag>
       </properties>
     </profile>
   </profiles>
