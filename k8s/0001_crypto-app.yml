@@ -114,7 +114,7 @@ spec:
                   fieldPath: metadata.namespace
             - name: QUARKUS_FLYWAY_ENABLED
               value: "false"
-          image: quay.io/jcechace/dbz-crypto-app:native-latest
+          image: quay.io/jcechace/dbz-crypto-app:native-adm64-latest
           imagePullPolicy: Always
           livenessProbe:
             failureThreshold: 3
