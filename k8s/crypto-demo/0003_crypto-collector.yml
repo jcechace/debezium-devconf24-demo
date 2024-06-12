@@ -1,9 +1,4 @@
 ---
-apiVersion: eventing.knative.dev/v1
-kind: Broker
-metadata:
-    name: debezium-sample-broker
----
 apiVersion: serving.knative.dev/v1
 kind: Service
 metadata:
@@ -14,11 +9,11 @@ spec:
     template:
         spec:
             containers:
-                - image: quay.io/jcechace/dbz-crypto-collector:native-amd64-latest
+                - image: quay.io/jcechace/dbz-crypto-collector:native-adm64-latest
                   imagePullPolicy: IfNotPresent
                   env:
                       - name: QUARKUS_REDIS_HOSTS
-                        value: "redis://redis:6379"
+                        value: "redis://redis.crypto-infra.svc.cluster.local:6379"
 
 ---
 apiVersion: eventing.knative.dev/v1

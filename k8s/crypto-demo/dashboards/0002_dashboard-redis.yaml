@@ -1,7 +1,7 @@
 apiVersion: grafana.integreatly.org/v1beta1
 kind: GrafanaDashboard
 metadata:
-  name: devconf-redis-grafana
+  name: crypto-data-dashboard
 spec:
   instanceSelector:
     matchLabels:
@@ -9,7 +9,7 @@ spec:
   datasources:
     - datasourceName: Redis
       inputName: "REDIS_SOURCE"
-  folder: "debezium-server"
+  folder: "crypto-data"
   json: |
     {
       "annotations": {

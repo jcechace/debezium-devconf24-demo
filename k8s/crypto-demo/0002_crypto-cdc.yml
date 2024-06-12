@@ -47,7 +47,7 @@ spec:
     schemaHistory:
       memory: {}
     config:
-      database.hostname: postgresql
+      database.hostname: postgresql.crypto-legacy.svc.cluster.local
       database.port: 5432
       database.user: ${POSTGRES_USER}
       database.password: ${POSTGRES_PASSWORD}
@@ -56,3 +56,12 @@ spec:
       topic.prefix: crypto
       plugin.name: pgoutput
       decimal.handling.mode: string
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: postgresql-credentials
+data:
+  POSTGRES_DB: Y29pbmNhcA==
+  POSTGRES_PASSWORD: cG9zdGdyZXM=
+  POSTGRES_USER: cG9zdGdyZXM=

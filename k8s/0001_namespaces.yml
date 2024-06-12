@@ -1,0 +1,21 @@
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: crypto-demo
+  labels:
+    name: crypto-demo
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: crypto-infra
+  labels:
+    name: crypto-infra
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: crypto-legacy
+  labels:
+    name: crypto-legacy

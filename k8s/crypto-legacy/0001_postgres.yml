@@ -25,6 +25,7 @@ kind: Deployment
 apiVersion: apps/v1
 metadata:
   name: postgresql
+  namespace: crypto-legacy
   labels:
     app: postgresql
 spec:

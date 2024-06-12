@@ -175,7 +175,7 @@ spec:
               value: "true"
             - name: QUARKUS_INIT_AND_EXIT
               value: "true"
-          image: quay.io/jcechace/dbz-crypto-app:native-latest
+          image: quay.io/jcechace/dbz-crypto-app:native-adm64-latest
           name: debezium-crypto-app-flyway-init
       restartPolicy: OnFailure
       serviceAccountName: debezium-crypto-app
