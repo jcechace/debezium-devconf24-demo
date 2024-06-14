@@ -9,7 +9,7 @@ spec:
     template:
         spec:
             containers:
-                - image: quay.io/jcechace/dbz-crypto-collector:native-adm64-latest
+                - image: quay.io/jcechace/dbz-crypto-collector:native-amd64-latest
                   imagePullPolicy: IfNotPresent
                   env:
                       - name: QUARKUS_REDIS_HOSTS

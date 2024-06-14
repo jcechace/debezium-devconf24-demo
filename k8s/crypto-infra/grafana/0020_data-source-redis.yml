@@ -10,6 +10,7 @@ spec:
   plugins:
     - name: redis-datasource
       version: 2.2.0
+  resyncPeriod: 5s
   datasource:
     name: Redis
     type: redis-datasource

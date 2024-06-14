@@ -25,8 +25,12 @@ helm install debezium-operator debezium/debezium-operator --version 2.7.0-beta2 
 4. Install Grafana operator
 
 ```shell
-helm install grafana-operator oci://ghcr.io/grafana/helm-charts/grafana-operator --version v5.6.3 -n crypto-infra
+helm install grafana-operator oci://ghcr.io/grafana/helm-charts/grafana-operator --version v5.9.2 -n crypto-infra
 ```
+
+## Deployment
+To deploy the entire demo, use `deploy.sh` which will walk you through the entire setup.
+Alternatively you can follow the steps in the consecutive sections.
 
 ## Deploying the Legacy Crypto Application
 For demonstration purposes the "legacy" application will be deployed in its
