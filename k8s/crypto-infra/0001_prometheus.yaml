@@ -11,7 +11,7 @@ data:
     scrape_configs:
       - job_name: 'server'
         static_configs:
-          - targets: ['debezium-crypto-cdcexporter-metrics.crypto-demo.svc.cluster.local:9090']
+          - targets: ['debezium-crypto-cdc-exporter-metrics.crypto-demo.svc.cluster.local:9090']
 ---
 apiVersion: v1
 kind: Service

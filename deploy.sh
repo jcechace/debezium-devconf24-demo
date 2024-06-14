@@ -5,7 +5,7 @@ kubectl create -f k8s/0001_namespaces.yml
 
 read -p "Press key to install Debezium Operator"
 helm repo add debezium https://charts.debezium.io
-helm install debezium-operator debezium/debezium-operator --version 2.7.0-beta1 -n crypto-demo
+helm install debezium-operator debezium/debezium-operator --version 2.7.0-beta2 -n crypto-demo
 
 read -p "Press key to install Grafana Operator"
 helm install grafana-operator oci://ghcr.io/grafana/helm-charts/grafana-operator --version v5.6.3 -n crypto-infra

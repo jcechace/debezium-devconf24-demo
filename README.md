@@ -19,7 +19,7 @@ kubectl create -f k8s/0001_namespaces.yml
 
 ```shell
 helm repo add debezium https://charts.debezium.io
-helm install debezium-operator debezium/debezium-operator --version 2.7.0-beta1 -n crypto-demo
+helm install debezium-operator debezium/debezium-operator --version 2.7.0-beta2 -n crypto-demo
 ```
 
 4. Install Grafana operator
