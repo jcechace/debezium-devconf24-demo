@@ -44,30 +44,108 @@ kubectl -n crypto-infra create -f k8s/crypto-infra
 kubectl -n crypto-infra create -f k8s/crypto-infra/grafana
 ```
 
-## Deploying CDC, Collector Application, and Metrics
+## Deploying the CDC-Based Solution
 Finally we are ready to deploy the cornerstone of our solution.
 
-```shell
-# Deploy Knative broker
-kubectl -n crypto-demo create -f k8s/crypto-demo/0001_broker.yml
 
+### 1. Knative Broker
+We will need a Knative broker, as a destion for our events.
+
+```shell
+kubectl -n crypto-demo create -f k8s/crypto-demo/0001_broker.yml
+```
+
+
+### 2. Debezium CDC component
+To capture database changes we will deployed the CDC component via the CR bellow.
+This `DebeziumServer` resources describes [Debezium Server](https://debezium.io/documentation/reference/stable/operations/debezium-server.html) instance with PostgreSQL source
+and HTTP sink destination. It also declares CloudEvents as output format and exposes metrics
+via [Prometheus JMX exporter](https://github.com/prometheus/jmx_exporter)
+```yaml
+apiVersion: debezium.io/v1alpha1
+kind: DebeziumServer
+metadata:
+  name: debezium-crypto-cdc
+spec:
+  quarkus:
+    config:
+      log.console.json: false
+      kubernetes-config.enabled: true
+      kubernetes-config.secrets: postgresql-credentials
+  runtime:
+    metrics:
+      jmxExporter:
+        enabled: true
+  sink:
+    type: http
+  format:
+    value:
+      type: cloudevents
+      config:
+        json.schemas.enable: false
+  source:
+    class: io.debezium.connector.postgresql.PostgresConnector
+    offset:
+      memory: {}
+    schemaHistory:
+      memory: {}
+    config:
+      database.hostname: postgresql.crypto-legacy.svc.cluster.local
+      database.port: 5432
+      database.user: ${POSTGRES_USER}
+      database.password: ${POSTGRES_PASSWORD}
+      database.dbname: ${POSTGRES_DB}
+      table.include.list: public.coincap
+      topic.prefix: crypto
+      plugin.name: pgoutput
+      decimal.handling.mode: string
+```
+Additionally to integrate with the Cloud Native broker we need to bind our Debezium Server
+instance to the broker via `SinkBinding` resource.
+
+```yaml
+apiVersion: sources.knative.dev/v1
+kind: SinkBinding
+metadata:
+  name: debezium-crypto-cdc-binding
+spec:
+  subject:
+    apiVersion: apps/v1
+    kind: Deployment
+    selector:
+      matchLabels:
+        debezium.io/component: DebeziumServer
+        debezium.io/instance: debezium-crypto-cdc
+  sink:
+    ref:
+      apiVersion: eventing.knative.dev/v1
+      kind: Broker
+      name: debezium-sample-broker
+```
+
+Both of these component can be deployed by running the following command
+
+```shell
 # Deploy the CDC component
 kubectl -n crypto-demo create -f k8s/crypto-demo/0002_crypto-cdc.yml
+```
 
-# Deploy collector service
+### 3. Crypto Collector Service
+To process the CloudEvent describing databse changes we will also deploy a simple
+[Knative Service](https://knative.dev/docs/serving/services/) which will transform the
+change into a time-series record and stores it in Redis.
+
+```shell
 kubectl -n crypto-demo create -f k8s/crypto-demo/0003_crypto-collector.yml
 ```
 
 When everything starts a time-series data for each cryptocurrency coin will
-be persisted in our Redis. To get a better representation of what is happening
-we can create Grafana dashboards for both -- the Debezium Server CDC component
-as well another dashboard which visualises the time-series data from redis.
+be persisted in our Redis.
+
+### 4. Visualising Cryptocurrency prices
+To visualise the price changes over time we will use a simple Grafana dashboard.
 
 ```shell
-# Debezium Server dashboard
-kubectl -n crypto-infra create -f k8s/crypto-demo/dashboards/0001_dashboard-cdc.yaml
-
-# Cryptocurrency data dashboard
 kubectl -n crypto-infra create -f k8s/crypto-demo/dashboards/0002_dashboard-redis.yaml
 ```
 
@@ -76,5 +154,13 @@ To access these dashboards you can expose the Grafana instance to your localhost
 kubectl -n crypto-infra  port-forward services/grafana-service 3000:3000
 ```
 
-Then simply visit `http://localhost:3000/` and log in
-using `root` as username  and `secret` as password.
+Then simply visit `http://localhost:3000/` and log in using `root` as username  and `secret` as password.
+
+### 5. Monitoring the CDC Process
+Our DebeziumServer instance exposes metrics to Prometheus. To viusalise this metrics
+we can deploy another Grafana dashboard for the CDC process.
+
+```shell
+kubectl -n crypto-infra create -f k8s/crypto-demo/dashboards/0001_dashboard-cdc.yaml
+```
+The dashboard will be available in the same Grafana instance as our cryptocurrency data.
